@@ -1,0 +1,1 @@
+namespaceler için 116. lesson izlemelisin 
