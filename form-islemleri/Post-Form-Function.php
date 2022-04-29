@@ -78,7 +78,7 @@
             <option <?php echo PostVarMi("sectionmultiple") && in_array("select1", PostVarMi("sectionmultiple")) ? "selected" : null  ?> value="select1">Select 1</option>
             <option <?php echo PostVarMi("sectionmultiple") && in_array("select2", PostVarMi("sectionmultiple")) ? "selected" : null  ?> value="select2">Select 2</option>
         </select>
-        <input type="hidden" name="key" value="5dqw4d5sf48wf22c15sfe5sa6s321ce4as5se8871q29">
+        <input type="hidden" name="key" value="<?=md5(uniqid())?>">
 
         <button type="submit">Send</button>
 
