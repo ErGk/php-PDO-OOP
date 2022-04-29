@@ -1,6 +1,5 @@
 <?php
 
-/*
 
 SELECT * FROM calisanlar WHERE maas >2000 AND maas < 3000
     => Çalışanlar tablosunda maaşı 2000 ile 3000 arasındaki elemanları listelemek için uzun yoldan kullanılan kod
