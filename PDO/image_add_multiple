@@ -1,0 +1,75 @@
+$files = array();
+      foreach ($_FILES['urun_gorseli'] as $k => $l) {
+        foreach ($l as $i => $v) {
+        if (!array_key_exists($i, $files))
+          $files[$i] = array();
+          $files[$i][$k] = $v;
+        }
+      } 
+      $sayi = 0;
+			foreach ($files as $file){
+				$sayi++;
+				$new_name = md5(rand(0, 900).rand(900, 9000).rand(9000, 90000).rand(90000, 900000));
+				$foo = new \Verot\Upload\Upload($file);
+				
+				if ($foo->uploaded){
+					$foo->image_convert = 'jpg';
+					$foo->image_ratio_fill= true;
+					$foo->image_background_color= '#FFFFFF';
+					$foo->image_watermark       = 'watermark.png';
+					$foo->jpeg_quality = 60;
+					$foo->file_new_name_body = $new_name;
+					$foo->file_max_size = '100000000';
+					$foo->image_max_height = 9000;
+					$foo->image_max_width = 9000;
+          $foo->allowed = array ( 'image/*' );
+					$foo->process('urungorselleri');
+          $resimyeri = "/urungorselleri/".$new_name.".jpg";
+          $query = $db->prepare(
+          'INSERT INTO urunler SET 
+              urun_basligi = ?,
+              urun_linki = ?,
+              urun_fiyati = ?,
+              urun_kisa_aciklama = ?,
+              urun_aciklamasi = ?,
+              urun_gorseli = ?,
+              kim_yukledi = ?,
+              urun_kategorisi = ?,
+              urun_alt_kategorisi = ?,
+              anahtar_kelime = ?,
+              urunu_one_cikart = ?,
+              ekstra_indirim = ?,
+              tarih = ?
+          '
+          );
+          $add = $query->execute([
+            $urun_basligi,
+            $urun_linki,
+            $urun_fiyati,
+            $urun_kisa_aciklama,
+            $urun_aciklamasi,
+            $resimyeri,
+            $kim_yukledi,
+            $urun_kategorisi,
+            $urun_alt_kategorisi,
+            $anahtar_kelime,
+            $urunu_one_cikart,
+            $ekstra_indirim,
+            $tarih
+          ]);
+
+          if ($add) {
+            echo '<div class="alert flex rounded-lg border border-success/30 bg-success/10 py-4 px-4 text-success sm:px-5">
+              Ürün Başarılı Olarak Yüklendi.
+            </div>';
+          } else {
+            $Erorr = $add->errorInfo();
+
+            echo 'Mysql Error:' . $Error[2];
+          }
+				}else{
+          echo '<div class="alert flex rounded-lg border border-error/30 bg-error/10 py-4 px-4 text-error sm:px-5">
+              Bir Hata Oluştu
+            </div>';
+        }
+      }
