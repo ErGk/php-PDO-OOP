@@ -1,0 +1,8 @@
+$kullanici_adi = addslashes(strip_tags($_POST['kullanici_adi']));
+$sifre = md5(addslashes(strip_tags($_POST['sifre'])));
+
+$query = $db -> prepare('SELECT count(*) FROM kullanicilar WHERE kullanici_adi= ? AND sifre = ?');
+$query -> execute([$kullanici_adi, $sifre]); 
+$count = $query->fetchColumn();
+
+echo $kullanici_adi. "-" . $sifre . "-" . $count;
